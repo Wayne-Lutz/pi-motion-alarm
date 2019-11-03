@@ -143,10 +143,17 @@ function setAlarmStatus() {
 	const motion_pic = $("#motion_pic");
 	if ( alarmState === 'Alarming' ) {
 		if ( !motion_pic.is(":visible") ) {
-			motion_pic.show("fast", "swing", () => motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime()));
+			// motion_pic.show("fast", "swing", () => motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime()));
+			motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime());
+			setTimeout(() => {
+				motion_pic.show("fast", "swing");
+			}, 400);
+			alarmSound.play();
 		}
-	} else if ( motion_pic.is(":visible") )
-		$("#motion_pic").hide("fast", "swing");
+	} else if ( motion_pic.is(":visible") ) {
+		motion_pic.hide("fast", "swing");
+		alarmSound.stop();
+	}
 }
 
 function monitorAlarm() {
@@ -190,5 +197,26 @@ function monitorAlarm() {
 	}, 1000);
 }
 
+function alarm(src) {
+	this.sound = document.createElement("audio");
+	this.sound.src = src;
+	this.sound.setAttribute("preload", "auto");
+	this.sound.setAttribute("controls", "none");
+	this.sound.style.display = "none";
+	this.sound.loop = true;
+
+	document.body.appendChild(this.sound);
+
+	this.play = () => {
+		this.sound.play();
+	};
+
+	this.stop = () => {
+		this.sound.pause();
+	}
+}
+
 $("#pin_form").hide();
+let alarmSound = new alarm("/audio/siren.mp3");
+// alarmSound.play();
 monitorAlarm();
