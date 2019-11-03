@@ -27,11 +27,13 @@ function togglePinPad(callback) {
 
 	clearPin();
 
-	if ( $(pin_form).is(":visible") ) {
-		$("#pin_form").hide("fast", "swing", callback);
+	const pin_form = $("#pin_form");
+
+	if ( pin_form.is(":visible") ) {
+		pin_form.hide("fast", "swing", callback);
 		label = "Show Pin Pad";
 	} else {
-		$("#pin_form").show("fast", "swing", callback);
+		pin_form.show("fast", "swing", callback);
 		label = "Hide Pin Pad";
 	}
 
@@ -117,7 +119,14 @@ function setAlarmButton() {
 }
 
 function setAlarmStatus() {
-	$("#alarm_status").val("Alarm is " + alarmState);
+	$("#alarm_status").val("Alarm is " + alarmState)
+	const motion_pic = $("#motion_pic");
+	if ( alarmState === 'Alarming' ) {
+		if ( true || !motion_pic.is(":visible") ) {
+			motion_pic.show("fast", "swing", () => motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime()));
+		}
+	} else if ( motion_pic.is(":visible") )
+		$("#motion_pic").hide("fast", "swing");
 }
 
 function monitorAlarm() {

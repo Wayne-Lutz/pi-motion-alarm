@@ -48,8 +48,20 @@ body {
 	border: 1px solid #d5d5d5;
 }
 #manage_alarm {
-	width: 90px;
+	width: 100px;
 	margin-right: 12px;
+}
+#motion_pic_box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 .pin_button {
   background: #ededed;

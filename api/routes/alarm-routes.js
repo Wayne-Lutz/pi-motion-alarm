@@ -14,4 +14,7 @@ module.exports = function(app) {
 
 	app.route('/api/alarm/alarmState')
 		.get(alarmController.getAlarmState);
+
+	app.route('/api/alarm/motionPic')
+		.get(alarmController.getMotionPic);
 };

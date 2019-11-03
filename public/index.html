@@ -9,7 +9,7 @@
 
 <body>
 	<div>
-		<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle">
+		<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle" style="display:none">
 			<input id="pin_box" type="password" value="" name="pin_box" disabled="true"/><br/>
 			<input type="button" class="pin_button" name="1" value="1" id="1" onclick="addNumber(this);"/><input
 				type="button"
@@ -86,6 +86,9 @@
 		<div id="control_box" name="control_box">
 			<input type="button" name="manage_alarm" value="" id="manage_alarm" onclick="manageAlarm();"/>
 			<input id="alarm_status" type="text" value="" name="alarm_status" disabled="true"/>
+		</div>
+		<div id="motion_pic_box" name="motion_pic_box">
+			<img id="motion_pic" name="motion_pic" src="/api/alarm/motionPic" alt="Motion Picture" style="display:none"/>
 		</div>
 	</div>
 </body>

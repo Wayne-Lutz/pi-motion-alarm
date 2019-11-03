@@ -59,12 +59,27 @@ exports.disarmMotionDetection = function(req, res) {
 	}
 };
 
-
 exports.getAlarmState = function(req, res) {
 	// console.log(`alarmController.getAlarmState() ENTERED`);
 
 	motionAlarm.alarmState.then((value) => {
 		// console.log('getAlarmState(), value= ' + value);
 		res.status(HttpStatus.OK).send(value);
+	});
+};
+
+exports.getMotionPic = function(req, res) {
+	// console.log(`alarmController.getMotionPic() ENTERED`);
+
+	motionAlarm.motionPic.then((value) => {
+		// console.log('getMotionPic(), value= ' + value);
+		// console.log(typeof value);
+		// console.log(JSON.stringify(value));
+		if ( value ) {
+			// res.status(HttpStatus.OK).write(new Buffer(value));
+			res.writeHead(HttpStatus.OK, {"Content-Type": "image/jpeg"});
+			res.write(new Buffer(value));
+		} else
+			res.status(HttpStatus.NOT_FOUND).send("Not found.");
 	});
 };
