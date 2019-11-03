@@ -29,6 +29,28 @@ body {
   text-align: center;
   border: 1px solid #d5d5d5;
 }
+#control_box {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+}
+#alarm_status {
+	background: #ededed;
+	width: 92%;
+	font-size: 2em;
+	text-align: center;
+	border: 1px solid #d5d5d5;
+}
+#manage_alarm {
+	width: 90px;
+	margin-right: 12px;
+}
 .pin_button {
   background: #ededed;
   color: #7e7e7e;

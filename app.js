@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const routes = require('./api/routes/index'); //importing route
 routes(app); //register the route
 
-motionAlarm.start();
+// motionAlarm.arm();
 
 
 module.exports = app;

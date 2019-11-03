@@ -8,80 +8,86 @@
 </head>
 
 <body>
-<div>
-	<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle">
-		<input id="pin_box" type="password" value="" name="pin_box" disabled="true"/><br/>
-		<input type="button" class="pin_button" name="1" value="1" id="1" onclick="addNumber(this);"/><input
-			type="button"
-			class="pin_button"
-			name="2"
-			value="2" id="2"
-			onclick="addNumber(this);"/><input
-			type="button"
-            class="pin_button"
-            name="3"
-            value="3"
-            id="3"
-            onclick="addNumber(this);"/><br/><input
-            type="button"
-            class="pin_button"
-            name="4"
-            value="4"
-            id="4"
-            onclick="addNumber(this);"/><input
-			type="button"
-			class="pin_button"
-			name="5"
-			value="5" id="5"
-			onclick="addNumber(this);"/><input
-			type="button"
-            class="pin_button"
-            name="6"
-            value="6"
-            id="6"
-            onclick="addNumber(this);"/><br/><input
-			type="button"
-            class="pin_button"
-            name="7"
-            value="7"
-            id="7"
-            onclick="addNumber(this);"/><input
-            type="button"
-            class="pin_button"
-            name="8"
-            value="8" id="8"
-            onclick="addNumber(this);"/><input
-			type="button"
-            class="pin_button"
-            name="9"
-            value="9"
-            id="9"
-            onclick="addNumber(this);"/><br/><input
-			type="button"
-            class="pin_button clear"
-            name="-"
-            value="clear"
-            id="-" onclick="clearPin(this);"/><input
-			type="button"
-            class="pin_button"
-            name="0"
-            value="0"
-            id="0"
-            onclick="addNumber(this);"/><input
-            type="button"
-            class="pin_button del"
-            name="del"
-            value="delete"
-            id="del"
-            onclick="delNumber();"><br/><input
-            type="button"
-            class="pin_button enter"
-            name="+"
-            value="enter"
-            id="+"
-            onclick="submitPin(pin_box);">
-	</form>
-</div>
+	<div>
+		<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle">
+			<input id="pin_box" type="password" value="" name="pin_box" disabled="true"/><br/>
+			<input type="button" class="pin_button" name="1" value="1" id="1" onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button"
+				name="2"
+				value="2" id="2"
+				onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button"
+				name="3"
+				value="3"
+				id="3"
+				onclick="addNumber(this);"/><br/><input
+				type="button"
+				class="pin_button"
+				name="4"
+				value="4"
+				id="4"
+				onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button"
+				name="5"
+				value="5" id="5"
+				onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button"
+				name="6"
+				value="6"
+				id="6"
+				onclick="addNumber(this);"/><br/><input
+				type="button"
+				class="pin_button"
+				name="7"
+				value="7"
+				id="7"
+				onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button"
+				name="8"
+				value="8" id="8"
+				onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button"
+				name="9"
+				value="9"
+				id="9"
+				onclick="addNumber(this);"/><br/><input
+				type="button"
+				class="pin_button clear"
+				name="-"
+				value="clear"
+				id="-" onclick="clearPin(this);"/><input
+				type="button"
+				class="pin_button"
+				name="0"
+				value="0"
+				id="0"
+				onclick="addNumber(this);"/><input
+				type="button"
+				class="pin_button del"
+				name="del"
+				value="delete"
+				id="del"
+				onclick="delNumber();"/><br/><input
+				type="button"
+				class="pin_button enter"
+				name="+"
+				value="enter"
+				id="+"
+				onclick="submitPin(pin_box);"/>
+		</form>
+		<br/>
+		<!--<input type="button" name="toggle_pin_pad" value="Hide Pin Pad" id="toggle_pin_pad" onclick="togglePinPad();"/>-->
+		<div id="control_box" name="control_box">
+			<input type="button" name="manage_alarm" value="" id="manage_alarm" onclick="manageAlarm();"/>
+			<input id="alarm_status" type="text" value="" name="alarm_status" disabled="true"/>
+		</div>
+	</div>
 </body>
 
 <script src='/javascripts/pinpad.js'></script>
