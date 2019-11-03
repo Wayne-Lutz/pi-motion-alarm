@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+const routes = require('./api/routes/index'); //importing route
+routes(app); //register the route
 
 module.exports = app;
