@@ -1,6 +1,6 @@
 'use strict';
 
-const alarmRoutes = require('./alarmRoutes');
+const alarmRoutes = require('./alarm-routes');
 // const utilRoutes = require('./utilRoutes');
 
 module.exports = function(app) {

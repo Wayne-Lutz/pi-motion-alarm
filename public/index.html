@@ -8,78 +8,78 @@
 </head>
 
 <body>
-<div id="PINcode">
-	<form action="" method="" name="PINform" id="PINform" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle" style="left: 664.5px; top: 229px;">
-		<input id="PINbox" type="password" value="" name="PINbox" disabled=""/><br/>
-		<input type="button" class="PINbutton" name="1" value="1" id="1" onclick="addNumber(this);"/><input
+<div>
+	<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle">
+		<input id="pin_box" type="password" value="" name="pin_box" disabled="true"/><br/>
+		<input type="button" class="pin_button" name="1" value="1" id="1" onclick="addNumber(this);"/><input
 			type="button"
-			class="PINbutton"
+			class="pin_button"
 			name="2"
 			value="2" id="2"
 			onclick="addNumber(this);"/><input
 			type="button"
-            class="PINbutton"
+            class="pin_button"
             name="3"
             value="3"
             id="3"
             onclick="addNumber(this);"/><br/><input
             type="button"
-            class="PINbutton"
+            class="pin_button"
             name="4"
             value="4"
             id="4"
             onclick="addNumber(this);"/><input
 			type="button"
-			class="PINbutton"
+			class="pin_button"
 			name="5"
 			value="5" id="5"
 			onclick="addNumber(this);"/><input
 			type="button"
-            class="PINbutton"
+            class="pin_button"
             name="6"
             value="6"
             id="6"
             onclick="addNumber(this);"/><br/><input
 			type="button"
-            class="PINbutton"
+            class="pin_button"
             name="7"
             value="7"
             id="7"
             onclick="addNumber(this);"/><input
             type="button"
-            class="PINbutton"
+            class="pin_button"
             name="8"
             value="8" id="8"
             onclick="addNumber(this);"/><input
 			type="button"
-            class="PINbutton"
+            class="pin_button"
             name="9"
             value="9"
             id="9"
             onclick="addNumber(this);"/><br/><input
 			type="button"
-            class="PINbutton clear"
+            class="pin_button clear"
             name="-"
             value="clear"
-            id="-" onclick="clearForm(this);"/><input
+            id="-" onclick="clearPin(this);"/><input
 			type="button"
-            class="PINbutton"
+            class="pin_button"
             name="0"
             value="0"
             id="0"
             onclick="addNumber(this);"/><input
             type="button"
-            class="PINbutton del"
+            class="pin_button del"
             name="del"
             value="delete"
             id="del"
             onclick="delNumber();"><br/><input
             type="button"
-            class="PINbutton enter"
+            class="pin_button enter"
             name="+"
             value="enter"
             id="+"
-            onclick="submitForm(PINbox);">
+            onclick="submitPin(pin_box);">
 	</form>
 </div>
 </body>

@@ -1,36 +1,37 @@
 $(function() {
-	$( "#PINform" ).draggable();
+	$( "#pin_form" ).draggable();
 });
 
 function addNumber(e){
-	var v = $( "#PINbox" ).val();
-	$( "#PINbox" ).val( v + e.value );
+	const box = $("#pin_box");
+	const v = box.val();
+
+	box.val(v + e.value);
 }
+
 function delNumber(){
-	var v = $( "#PINbox" ).val();
-	$( "#PINbox" ).val( v.slice(0, -1) );
+	const box = $("#pin_box");
+	const v = box.val();
+
+	box.val( v.slice(0, -1) );
 }
-function clearForm(e){
-	//document.getElementById('PINbox').value = "";
-	$( "#PINbox" ).val( "" );
+
+function clearPin() {
+	$("#pin_box").val( "" );
 }
-function submitForm(e) {
+
+function submitPin(e) {
 	if (e.value === "") {
-		alert("Enter a PIN");
+		alert("Please enter a PIN!");
 	} else {
-		// alert( "Your PIN has been sent! - " + e.value );
-		var data = {
+		const data = {
 			pin: e.value
 		};
 
 		console.log("data= " + JSON.stringify(data));
 
-		// apiCall( data, function( r ) {
-		// 	console.log("r= " + JSON.stringify(r));
-		// });
-
 		fetch("/api/alarm/enterPin", {
-			method: 'POST', // or 'PUT'
+			method: 'POST',
 			body: JSON.stringify(data), // data can be `string` or {object}!
 			headers: {
 				'Content-Type': 'application/json'
@@ -42,23 +43,7 @@ function submitForm(e) {
 			console.error(error)
 		});
 
-		$( "#PINbox" ).val( "" );
-	};
-};
-
-
-function apiCall( post, callback ) {
-	$.ajax({
-		type: "POST",
-		contentType: "application/json",
-		url: "/api/alarm/enterPin",
-		data: JSON.stringify( post ),
-		dataType: "json",
-		success: function ( r ) {
-			callback( r );
-		},
-		error: function ( response ) {
-			console.error( response )
-		},
-	});
+		clearPin();
+	}
 }
+
