@@ -1,3 +1,4 @@
+const USE_FETCH = true;
 let alarmState, mode;
 
 $(function() {
@@ -60,31 +61,50 @@ function submitPin(e) {
 				api = '/api/alarm/arm';
 				break;
 			case "Alarming":
-				api = '/api/alarm/arm';
+				// api = '/api/alarm/arm';
+				api = '/api/alarm/disarm';
 				break;
 		}
 
-		fetch(api, {
-			method: 'POST',
-			body: JSON.stringify(data), // data can be `string` or {object}!
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then(function(response) {
-			// console.log("Success: status: " + response.status + ", statusText: " + response.statusText + ", response.text(): " +
-			// 	response.text() + ", body: " + response.body);
-			if ( response.status === 200 ) {
-				togglePinPad();
-				monitorAlarm();
-			} else {
-				response.text().then((val) => {
-					alert(val);
-				});
-			}
-		}).catch(function(error) {
-			console.error(error)
-			alert(error);
-		});
+		if ( USE_FETCH ) {
+			fetch(api, {
+				method: 'POST',
+				body: JSON.stringify(data), // data can be `string` or {object}!
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(function (response) {
+				// console.log("Success: status: " + response.status + ", statusText: " + response.statusText + ", response.text(): " +
+				// 	response.text() + ", body: " + response.body);
+				if (response.status === 200) {
+					togglePinPad();
+					monitorAlarm();
+				} else {
+					response.text().then((val) => {
+						alert(val);
+					});
+				}
+			}).catch(function (error) {
+				console.error(error)
+				alert(error);
+			});
+		} else {
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+				url: api,
+				data: JSON.stringify( data ),
+				success: function ( response ) {
+					// console.log( "Success:  " + JSON.stringify(response));
+					togglePinPad();
+					monitorAlarm();
+				},
+				error: function ( response ) {
+					console.error( "Error:  " + JSON.stringify(response));
+					alert(response.responseText);
+				},
+			});
+		}
 
 		clearPin();
 	}
@@ -122,7 +142,7 @@ function setAlarmStatus() {
 	$("#alarm_status").val("Alarm is " + alarmState)
 	const motion_pic = $("#motion_pic");
 	if ( alarmState === 'Alarming' ) {
-		if ( true || !motion_pic.is(":visible") ) {
+		if ( !motion_pic.is(":visible") ) {
 			motion_pic.show("fast", "swing", () => motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime()));
 		}
 	} else if ( motion_pic.is(":visible") )
@@ -131,26 +151,42 @@ function setAlarmStatus() {
 
 function monitorAlarm() {
 	setTimeout(() => {
-		fetch("/api/alarm/alarmState", {
-			method: 'GET'
-		}).then(function(response) {
-			response.text().then((val) => {
-				// console.log("text: val= '" + val + "'");
-				alarmState = val;
-				setAlarmStatus();
-				setAlarmButton();
-				if ( alarmState !== 'Disarmed' )
+		if ( USE_FETCH ) {
+			fetch("/api/alarm/alarmState", {
+				method: 'GET'
+			}).then(function (response) {
+				response.text().then((val) => {
+					// console.log("text: val= '" + val + "'");
+					alarmState = val;
+					setAlarmStatus();
+					setAlarmButton();
+					if (alarmState !== 'Disarmed')
+						monitorAlarm();
+				});
+			}).catch(function (error) {
+				console.error(error)
+				if (alarmState !== 'Disarmed')
 					monitorAlarm();
+			})
+		} else {
+			$.ajax({
+				type: "GET",
+				url: "/api/alarm/alarmState",
+				success: function ( response ) {
+					// console.log( "Success:  " + JSON.stringify(response));
+					alarmState = response;
+					setAlarmStatus();
+					setAlarmButton();
+					if (alarmState !== 'Disarmed')
+						monitorAlarm();
+				},
+				error: function ( response ) {
+					console.error( "Error:  " + JSON.stringify(response));
+					if (alarmState !== 'Disarmed')
+						monitorAlarm();
+				},
 			});
-		}).catch(function(error) {
-			console.error(error)
-			if ( alarmState !== 'Disarmed' )
-				monitorAlarm();
-		})
-		// .finally((() => {
-		// 	if ( alarmState !== 'Disarmed' )
-		// 		monitorAlarm();
-		// }));
+		}
 	}, 1000);
 }
 
