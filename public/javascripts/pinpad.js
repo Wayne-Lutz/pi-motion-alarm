@@ -1,5 +1,5 @@
 const USE_FETCH = true;
-let alarmState, mode;
+let alarmState, pin1, mode;
 
 $(function() {
 	$("#pin_form").draggable();
@@ -23,28 +23,43 @@ function clearPin() {
 	$("#pin_box").val( "" );
 }
 
-function togglePinPad(callback) {
-	let label;
+function showPinPad(callback) {
+	$("#pin_form").show("fast", "swing", callback);
+}
 
+function hidePinPad(callback) {
+	$("#pin_form").hide("fast", "swing", callback);
+}
+
+function togglePinPad(callback) {
 	clearPin();
 
-	const pin_form = $("#pin_form");
-
-	if ( pin_form.is(":visible") ) {
-		pin_form.hide("fast", "swing", callback);
-		label = "Show Pin Pad";
+	if ( $("#pin_form").is(":visible") ) {
+		hidePinPad(callback)
 	} else {
-		pin_form.show("fast", "swing", callback);
-		label = "Hide Pin Pad";
+		showPinPad(callback);
 	}
-
-	$("#toggle_pin_pad").val(label);
 }
 
 function submitPin(e) {
 	if (e.value === "") {
 		alert("Please enter a PIN!");
 	} else {
+		if ( alarmState === "NoPin" ) {
+			if ( !pin1 ) {
+				pin1 = e.value;
+				$("#pin_msg").val("Re-enter PIN");
+				clearPin();
+				return;
+			} else if (pin1 !== e.value ) {
+				$("#pin_msg").val("PINs do not match, try again!");
+				clearPin();
+				pin1 = null;
+				return;
+			}
+		}
+
+		pin1 = null;
 		const data = {
 			pin: e.value
 		};
@@ -53,7 +68,10 @@ function submitPin(e) {
 
 		let api;
 
-		switch ( alarmState ) {
+		switch (alarmState) {
+			case "NoPin":
+				api = '/api/alarm/setPin';
+				break;
 			case "Armed":
 				api = '/api/alarm/disarm';
 				break;
@@ -66,7 +84,7 @@ function submitPin(e) {
 				break;
 		}
 
-		if ( USE_FETCH ) {
+		if (USE_FETCH) {
 			fetch(api, {
 				method: 'POST',
 				body: JSON.stringify(data), // data can be `string` or {object}!
@@ -93,14 +111,14 @@ function submitPin(e) {
 				type: "POST",
 				contentType: "application/json",
 				url: api,
-				data: JSON.stringify( data ),
-				success: function ( response ) {
+				data: JSON.stringify(data),
+				success: function (response) {
 					// console.log( "Success:  " + JSON.stringify(response));
 					togglePinPad();
 					monitorAlarm();
 				},
-				error: function ( response ) {
-					console.error( "Error:  " + JSON.stringify(response));
+				error: function (response) {
+					console.error("Error:  " + JSON.stringify(response));
 					alert(response.responseText);
 				},
 			});
@@ -111,7 +129,6 @@ function submitPin(e) {
 }
 
 function manageAlarm() {
-	// $("#pin_form").show();
 	togglePinPad(setAlarmButton);
 }
 
@@ -139,20 +156,34 @@ function setAlarmButton() {
 }
 
 function setAlarmStatus() {
-	$("#alarm_status").val("Alarm is " + alarmState)
-	const motion_pic = $("#motion_pic");
-	if ( alarmState === 'Alarming' ) {
-		if ( !motion_pic.is(":visible") ) {
-			// motion_pic.show("fast", "swing", () => motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime()));
-			motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime());
-			setTimeout(() => {
-				motion_pic.show("fast", "swing");
-			}, 400);
-			alarmSound.play();
+	const alarm_status = $("#alarm_status");
+	const pin_msg = $("#pin_msg");
+
+	if ( alarmState === 'NoPin' ) {
+		alarm_status.val("Set your Alarm Pin");
+		pin_msg.val("Set your PIN");
+		pin_msg.show();
+		showPinPad();
+	} else {
+		pin_msg.hide();
+		alarm_status.val("Alarm is " + alarmState)
+		const motion_pic = $("#motion_pic");
+
+		if ( alarmState === 'Alarming' ) {
+			if ( !motion_pic.is(":visible") ) {
+				// motion_pic.show("fast", "swing", () => motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime()));
+				motion_pic.attr("src", "/api/alarm/motionPic?" +  (new Date()).getTime());
+				setTimeout(() => {
+					motion_pic.show("fast", "swing");
+				}, 400);
+				alarmSound.play();
+			}
+		} else if ( motion_pic.is(":visible") ) {
+			motion_pic.hide("fast", "swing");
+			alarmSound.stop();
 		}
-	} else if ( motion_pic.is(":visible") ) {
-		motion_pic.hide("fast", "swing");
-		alarmSound.stop();
+
+		setAlarmButton();
 	}
 }
 
@@ -166,13 +197,12 @@ function monitorAlarm() {
 					// console.log("text: val= '" + val + "'");
 					alarmState = val;
 					setAlarmStatus();
-					setAlarmButton();
-					if (alarmState !== 'Disarmed')
+					if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
 						monitorAlarm();
 				});
 			}).catch(function (error) {
 				console.error(error)
-				if (alarmState !== 'Disarmed')
+				if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
 					monitorAlarm();
 			})
 		} else {
@@ -183,13 +213,12 @@ function monitorAlarm() {
 					// console.log( "Success:  " + JSON.stringify(response));
 					alarmState = response;
 					setAlarmStatus();
-					setAlarmButton();
-					if (alarmState !== 'Disarmed')
+					if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
 						monitorAlarm();
 				},
 				error: function ( response ) {
 					console.error( "Error:  " + JSON.stringify(response));
-					if (alarmState !== 'Disarmed')
+					if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
 						monitorAlarm();
 				},
 			});

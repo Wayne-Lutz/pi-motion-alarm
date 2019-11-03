@@ -11,7 +11,7 @@ body {
 #pin_form {
   background: aqua;
   position: absolute;
-  width: 300px; height: 430px;
+  width: 300px;
   left: 50%;
   margin-left: -180px;
   top: 50%;
@@ -28,6 +28,14 @@ body {
   font-size: 2em;
   text-align: center;
   border: 1px solid #d5d5d5;
+}
+#pin_msg {
+    background: transparent;
+    color: white;
+    width: 100%;
+    font-size: 1.4em;
+    text-align: center;
+    border: 0px solid #d5d5d5;
 }
 #control_box {
 	display: -webkit-box;
@@ -48,8 +56,14 @@ body {
 	border: 1px solid #d5d5d5;
 }
 #manage_alarm {
-	width: 100px;
+	width: 160px;
+    font-size: 1.3em;
 	margin-right: 12px;
+}
+#manage_pin {
+    width: 160px;
+    font-size: 1.3em;
+    margin-left: 12px;
 }
 #motion_pic_box {
     display: -webkit-box;
