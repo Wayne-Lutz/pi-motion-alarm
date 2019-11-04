@@ -9,9 +9,9 @@
 
 <body>
 	<div>
-		<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle" style="display:none">
-			<input id="pin_msg" type="text" value="" name="pin_msg" disabled="true" style="display:none">
-			<input id="pin_box" type="password" value="" name="pin_box" disabled="true"/><br/>
+		<form action="" method="" name="pin_form" id="pin_form" autocomplete="off" draggable="true" class="ui-draggable ui-draggable-handle" style="display:none" readonly>
+			<input id="pin_msg" type="text" value="" name="pin_msg" readonly>
+			<input id="pin_box" type="password" value="" name="pin_box" readonly/><br/>
 			<input type="button" class="pin_button" name="1" value="1" id="1" onclick="addNumber(this);"/><input
 				type="button"
 				class="pin_button"
@@ -74,13 +74,21 @@
 				name="del"
 				value="delete"
 				id="del"
-				onclick="delNumber();"/><br/><input
+				onclick="delNumber();"/><br/>
+			<hr/>
+			<input
 				type="button"
 				class="pin_button enter"
 				name="+"
 				value="enter"
 				id="+"
-				onclick="submitPin(pin_box);"/>
+				onclick="submitPin(pin_box);"/><input
+				type="button"
+				class="pin_button enter"
+				name="cancel"
+				value="cancel"
+				id="cancel"
+				onclick="hidePinPad();"/>
 		</form>
 		<br/>
 

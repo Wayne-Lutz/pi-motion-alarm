@@ -2,7 +2,22 @@ const USE_FETCH = true;
 let alarmState, currentPin, pin1, mode, alarmTimer;
 
 $(function() {
-	$("#pin_form").draggable();
+	$("#pin_form").draggable({
+		start: function( event, ui ) {
+			$(this).data('preventBehaviour', true);
+		}
+	});
+	$("#pin_form input").on('mousedown', function (e) {
+		let mdown = document.createEvent("MouseEvents");
+		mdown.initMouseEvent("mousedown", false, true, window, 0, e.screenX, e.screenY, e.clientX, e.clientY, true, false, false, true, 0, null);
+		$(this).closest('#pin_form')[0].dispatchEvent(mdown);
+	}).on('click', function(e){
+		let $draggable = $(this).closest('#pin_form');
+		if($draggable.data("preventBehaviour")){
+			e.preventDefault();
+			$draggable.data("preventBehaviour", false)
+		}
+	});
 });
 
 function addNumber(e){
@@ -24,13 +39,16 @@ function clearPin() {
 }
 
 function showPinPad(callback) {
+	$("#manage_alarm").attr('disabled', true);
+	$("#manage_pin").attr('disabled', true);
 	$("#pin_form").show("fast", "swing", callback);
 }
 
 function hidePinPad(callback) {
 	mode = alarmState;
 	$("#pin_form").hide("fast", "swing", callback);
-	setPinMsg("");
+	$("#manage_pin").attr('disabled', false);
+	$("#manage_alarm").attr('disabled', false);
 }
 
 function togglePinPad(callback) {
@@ -66,7 +84,12 @@ function submitPin(e) {
 				clearPin();
 				return;
 			} else if (pin1 !== e.value ) {
-				setPinMsg("PINs do not match, try again!");
+				if ( mode === "NoPin" )
+					setPinMsg("Set your PIN");
+				else
+					setPinMsg("Enter new PIN");
+
+				alert("PINs do not match, try again!");
 				clearPin();
 				pin1 = null;
 				return;
@@ -150,6 +173,7 @@ function submitPin(e) {
 }
 
 function manageAlarm() {
+	setPinMsg("Enter your current PIN");
 	togglePinPad(setAlarmButton);
 }
 
@@ -162,21 +186,17 @@ function managePin() {
 function setAlarmButton() {
 	let label;
 
-	if ( $(pin_form).is(":visible") ) {
-		label = "Cancel";
-	} else {
-		switch (mode) {
-			case "Armed":
-				label = "Disarm Alarm";
-				break;
-			case "Alarming":
-				label = "Cancel Alarm";
-				break;
-			case "Disarmed":
-			default:
-				label = "Arm Alarm";
-				break;
-		}
+	switch (mode) {
+		case "Armed":
+			label = "Disarm Alarm";
+			break;
+		case "Alarming":
+			label = "Cancel Alarm";
+			break;
+		case "Disarmed":
+		default:
+			label = "Arm Alarm";
+			break;
 	}
 
 	$("#manage_alarm").val(label);
@@ -201,17 +221,19 @@ function setAlarmStatus() {
 
 	if ( !isModeChangingPin() ) {
 		const alarm_status = $("#alarm_status");
+		const manage_alarm = $("#manage_alarm");
 		const manage_pin = $("#manage_pin");
 
 		mode = alarmState;
 
 		if (alarmState === 'NoPin') {
+			manage_alarm.hide();
 			manage_pin.hide();
 			alarm_status.val("Set your Alarm Pin");
 			setPinMsg("Set your PIN");
 			showPinPad();
 		} else {
-			// setPinMsg("");
+			manage_alarm.show();
 			manage_pin.show();
 			alarm_status.val("Alarm is " + alarmState)
 			const motion_pic = $("#motion_pic");
