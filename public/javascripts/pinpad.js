@@ -46,6 +46,7 @@ function showPinPad(callback) {
 
 function hidePinPad(callback) {
 	mode = alarmState;
+	currentPin = null;
 	$("#pin_form").hide("fast", "swing", callback);
 	$("#manage_pin").attr('disabled', false);
 	$("#manage_alarm").attr('disabled', false);
@@ -266,16 +267,16 @@ function monitorAlarm() {
 				method: 'GET'
 			}).then(function (response) {
 				response.text().then((val) => {
-					// console.log("text: val= '" + val + "'");
+					// console.log("alarmState: val= '" + val + "'");
 					alarmState = val;
+					if ( (mode === 'NoPin') && (mode !== alarmState) )
+						hidePinPad();
 					setAlarmStatus();
-					if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
-						monitorAlarm();
+					monitorAlarm();
 				});
 			}).catch(function (error) {
 				console.error(error)
-				if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
-					monitorAlarm();
+				monitorAlarm();
 			})
 		} else {
 			$.ajax({
@@ -284,14 +285,14 @@ function monitorAlarm() {
 				success: function ( response ) {
 					// console.log( "Success:  " + JSON.stringify(response));
 					alarmState = response;
+					if ( (mode === 'NoPin') && (mode !== alarmState) )
+						hidePinPad();
 					setAlarmStatus();
-					if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
-						monitorAlarm();
+					monitorAlarm();
 				},
 				error: function ( response ) {
 					console.error( "Error:  " + JSON.stringify(response));
-					if ((alarmState !== 'Disarmed') && (alarmState !== 'NoPin'))
-						monitorAlarm();
+					monitorAlarm();
 				},
 			});
 		}
