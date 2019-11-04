@@ -6,6 +6,12 @@ module.exports = function(app) {
 	app.route('/api/alarm/setPin')
 		.post(alarmController.setPin);
 
+	app.route('/api/alarm/matchPin')
+		.post(alarmController.matchPin);
+
+	app.route('/api/alarm/changePin')
+		.post(alarmController.changePin);
+
 	app.route('/api/alarm/arm')
 		.post(alarmController.armMotionDetection);
 
