@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+var os = require("os");
+
 var app = require('../app');
 var debug = require('debug')('pi-motion-alarm:server');
 var http = require('http');
@@ -81,10 +83,43 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
+function filterAddresses(iFace) {
+  // console.log(`iFace= `, iFace);
+
+  return iFace.filter(function (iFace) {
+        return !iFace.internal && iFace.family === 'IPv4';
+      })
+      .map(function (iFace) {
+        // console.log('iFace= ', iFace);
+        return iFace.address;
+      });
+}
+
+function getIpAddresses() {
+  var addresses = [];
+  var iFaces = os.networkInterfaces();
+
+  for ( const i in iFaces ) {
+    addresses.push(...filterAddresses(iFaces[i]));
+  }
+
+  // console.log('addresses= ', addresses);
+  return addresses;
+}
+
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  // console.log('Listening on ' + bind + ", addr= ",addr);
+  // console.log(`os.hostname= ${os.hostname()}, os.networkInterfaces()= `, JSON.stringify(os.networkInterfaces()));
+  console.log(`pi-motion-alarm server is now live on:\n`);
+  console.log(`http://${os.hostname()}:${port}`);
+
+  getIpAddresses().forEach(function (address) {
+    console.log(`or:\nhttp://${address}:${port}`);
+  });
+  console.log('\n');
 }
