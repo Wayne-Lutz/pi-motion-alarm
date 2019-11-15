@@ -112,14 +112,22 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
   // console.log('Listening on ' + bind + ", addr= ",addr);
   // console.log(`os.hostname= ${os.hostname()}, os.networkInterfaces()= `, JSON.stringify(os.networkInterfaces()));
+
+  // Print out the available URLs that can access pi-motion-alarm
   console.log(`pi-motion-alarm server is now live on:\n`);
+  // First use the hostname
   console.log(`http://${os.hostname()}:${port}`);
 
+  // Then use the available ipaddresses
   getIpAddresses().forEach(function (address) {
     console.log(`or:\nhttp://${address}:${port}`);
   });
+
+  console.log(`\nTo access from this local system, use:\n`);
+  console.log(`http://localhost:${port}`);
+  console.log(`or:\nhttp://127.0.0.1:${port}`);
   console.log('\n');
 }
