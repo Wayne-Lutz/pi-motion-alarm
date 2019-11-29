@@ -1,4 +1,4 @@
-const USE_FETCH = true;
+
 let alarmState, currentPin, pin1, mode, alarmTimer;
 
 $(function() {
@@ -131,43 +131,26 @@ function submitPin(e) {
 		}
 
 		console.log("submitPin(), mode= " + mode + ", api= " + api);
-
-		if (USE_FETCH) {
-			fetch(api, {
-				method: 'POST',
-				body: JSON.stringify(data), // data can be `string` or {object}!
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(function (response) {
-				// console.log("Success: status: " + response.status + ", statusText: " + response.statusText + ", body: " + response.body);
-				if (response.status === 200) {
-					submitPinSuccess();
-				} else {
-					response.text().then((val) => {
-						alert(val);
-					});
-				}
-			}).catch(function (error) {
-				console.error(error)
-				alert(error);
-			});
-		} else {
-			$.ajax({
-				type: "POST",
-				contentType: "application/json",
-				url: api,
-				data: JSON.stringify(data),
-				success: function (response) {
-					// console.log( "Success:  " + JSON.stringify(response));
-					submitPinSuccess();
-				},
-				error: function (response) {
-					console.error("Error:  " + JSON.stringify(response));
-					alert(response.responseText);
-				},
-			});
-		}
+		fetch(api, {
+			method: 'POST',
+			body: JSON.stringify(data), // data can be `string` or {object}!
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(function (response) {
+			// console.log("Success: status: " + response.status + ", statusText: " + response.statusText + ", body: " + response.body);
+			if (response.status === 200) {
+				submitPinSuccess();
+			} else {
+				response.text().then((val) => {
+					alert(val);
+				});
+			}
+		}).catch(function (error) {
+			console.error(error)
+			alert(error);
+		});
+	
 
 		clearPin();
 	}
@@ -262,40 +245,22 @@ function monitorAlarm() {
 	clearTimeout(alarmTimer);
 
 	alarmTimer = setTimeout(() => {
-		if ( USE_FETCH ) {
-			fetch("/api/alarm/alarmState", {
-				method: 'GET'
-			}).then(function (response) {
-				response.text().then((val) => {
-					// console.log("alarmState: val= '" + val + "'");
-					alarmState = val;
-					if ( (mode === 'NoPin') && (mode !== alarmState) )
-						hidePinPad();
-					setAlarmStatus();
-					monitorAlarm();
-				});
-			}).catch(function (error) {
-				console.error(error)
+		fetch("/api/alarm/alarmState", {
+			method: 'GET'
+		}).then(function (response) {
+			response.text().then((val) => {
+				// console.log("alarmState: val= '" + val + "'");
+				alarmState = val;
+				if ( (mode === 'NoPin') && (mode !== alarmState) )
+					hidePinPad();
+				setAlarmStatus();
 				monitorAlarm();
-			})
-		} else {
-			$.ajax({
-				type: "GET",
-				url: "/api/alarm/alarmState",
-				success: function ( response ) {
-					// console.log( "Success:  " + JSON.stringify(response));
-					alarmState = response;
-					if ( (mode === 'NoPin') && (mode !== alarmState) )
-						hidePinPad();
-					setAlarmStatus();
-					monitorAlarm();
-				},
-				error: function ( response ) {
-					console.error( "Error:  " + JSON.stringify(response));
-					monitorAlarm();
-				},
 			});
-		}
+		}).catch(function (error) {
+			console.error(error)
+			monitorAlarm();
+		})
+	
 	}, 1000);
 }
 
