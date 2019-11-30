@@ -1,9 +1,10 @@
+// This is our main Express route configuration index file.
 'use strict';
 
+// Pull in our alarm-routes.
 const alarmRoutes = require('./alarm-routes');
-// const utilRoutes = require('./utilRoutes');
 
+// And export them.
 module.exports = function(app) {
 	alarmRoutes(app);
-	// utilRoutes(app);
 };
