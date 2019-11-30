@@ -160,9 +160,6 @@ exports.getMotionPic = function(req, res) {
 
 	// Retrieve the jpeg image data.
 	motionAlarm.motionPic.then((value) => {
-		// console.log('getMotionPic(), value= ' + value);
-		// console.log(typeof value);
-		// console.log(JSON.stringify(value));
 
 		// Check that it is not null.
 		if ( value ) {
